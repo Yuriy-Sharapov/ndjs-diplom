@@ -1,0 +1,75 @@
+<form method="POST" class="mt-5">
+    <div class="form-group">
+        <label for="inputTitle">Заголовок</label>
+        <input type="text"
+               value="<%= book.title %>"
+               name="title"
+               class="form-control"
+               id="inputTitle">
+    </div>
+
+    <div class="form-group">
+        <label for="inputDesc">Описание</label>
+        <textarea
+                rows="3"
+                name="description"
+                class="form-control"
+                id="inputDesc"
+        ><%= book.description %></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAuthors">Авторы</label>
+        <input type="text"
+               value="<%= book.authors %>"
+               name="authors"
+               class="form-control"
+               id="inputAuthors">
+    </div>
+ 
+    <div class="form-group">
+        <label for="inputFavorite">Рекомендуемая</label>
+        <input type="text"
+               value="<%= book.favorite %>"
+               name="favorite"
+               class="form-control"
+               id="inputFavorite">
+    </div>
+
+    <div class="form-group">
+        <label for="inputFileCover">Полный путь</label>
+        <input type="text"
+               value="<%= book.fileCover %>"
+               name="fileCover"
+               class="form-control"
+               id="inputFileCover">
+    </div>
+
+    <div class="form-group">
+        <label for="inputFileName">Название файла</label>
+        <input type="text"
+               value="<%= book.fileName %>"
+               name="fileName"
+               class="form-control"
+               id="inputFileName">
+    </div>
+
+    <div class="form-group">
+        <label for="inputFileBook">Полный путь 2</label>
+        <input type="text"
+               value="<%= book.fileBook %>"
+               name="fileBook"
+               class="form-control"
+               id="inputFileBook">
+    </div>    
+
+    <!-- <div class="input-group mb-3">
+        <input type="file" class="form-control" id="inputGroupFile02">
+        <label class="input-group-text" for="inputGroupFile02">Загрузить</label>
+    </div>     -->
+
+    <div class="form-group text-right ">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </div>
+    
+</form>

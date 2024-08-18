@@ -1,0 +1,14 @@
+<%- include('../port/layout-start', { title: title }) %>
+<%- include('../port/menu', { user: user }) %>
+
+<p>
+    <b>ID:</b>         <%= user.id %><br />
+    <b>Username:</b>   <%= user.username %><br />
+    <b>Name:</b>       <%= user.displayName %><br />
+    <% if (user.emails) { %>
+        <b>Email:</b>  <%= user.emails[0].value %><br />
+    <% } %>
+</p>
+<a href='/user/logout'>Выйти</a>
+
+<%- include('../port/layout-end') %>

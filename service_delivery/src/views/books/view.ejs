@@ -1,0 +1,82 @@
+<%- include('../port/layout-start', {title: title}) %>
+<%- include('../port/menu', { user: user }) %>
+
+<h1><%= title %></h1>
+
+<div class="row">
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title"><%= book.title %></h5>
+
+                <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>Описание</td>
+                        <td><%= book.description %></td>
+                      </tr>
+                      <tr>
+                        <td>Авторы</td>
+                        <td><%= book.authors %></td>
+                      </tr>
+                      <tr>
+                        <td>Рекомендуемая</td>
+                        <td><%= book.favorite %></td>
+                      </tr>
+                      <tr>
+                        <td>Полный путь</td>
+                        <td><%= book.fileCover %></td>
+                      </tr>  
+                      <tr>
+                        <td>Название файла</td>
+                        <td><%= book.fileName %></td>
+                      </tr> 
+                      <tr>
+                        <td>Полный путь 2</td>
+                        <td><%= book.fileBook %></td>
+                      </tr>  
+                      <tr>
+                        <td>Количество обращений</td>
+                        <td><%= cnt %></td>
+                      </tr>                                                                                      
+                    </tbody>
+                </table>
+
+                <div class="text-right">
+                    <a class="btn btn-sm btn-primary" href="/books/update/<%= book.id %>">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                    <form action="/books/delete/<%= book.id %>" method="POST" class="d-inline">
+                        <button class="btn btn-sm btn-danger">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row d-flex justify-content-left">
+  <div class="col-md-8 col-lg-8">
+      <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+          <div class="card-body p-4">
+
+              <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" id="text" class="form-control" placeholder="Напишите комментарий..." />
+                  <button type="submit" for="text" id="send-all" class="btn btn-primary">Отправить комментарий</button>
+              </div>
+
+              <div id="list" class="list-group">
+
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<%- include('../port/layout-end-with-socket', { user: user }) %>

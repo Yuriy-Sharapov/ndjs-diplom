@@ -1,0 +1,27 @@
+{
+  "name": "ndjs-hometask-007-middleware",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon -L"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "----------------------------- Задание 1 -----------------------------\r Установить в проект шаблонизатор ejs.",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.7.5",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "keywords": []
+}

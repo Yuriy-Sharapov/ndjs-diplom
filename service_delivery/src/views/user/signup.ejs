@@ -1,0 +1,30 @@
+<%- include('../port/layout-start', { title: title }) %>
+<%- include('../port/menu', { user: user }) %>
+
+<form action="/user/signup" method="post">   
+    <div>
+        <label>Логин</label>
+        <input type="text" name="username" value="<%= user_prefill.username %>"/><br />
+    </div>
+    <div>
+        <label>Пароль</label>
+        <input type="password" name="password" />
+    </div>
+    <div>
+        <label>Подтвердить пароль</label>
+        <input type="password" name="password_rep" />
+    </div>    
+    <div>
+        <label>Имя пользователя</label>
+        <input type="text" name="displayName" value="<%= user_prefill.displayName %>"/>
+    </div>    
+    <div>
+        <label>Электронный адрес</label>
+        <input type="email" name="email" value="<%= user_prefill.email %>"/>
+    </div>        
+    <div>
+        <input type="submit" value="Создать пользователя" />
+    </div>
+</form>
+
+<%- include('../port/layout-end') %>

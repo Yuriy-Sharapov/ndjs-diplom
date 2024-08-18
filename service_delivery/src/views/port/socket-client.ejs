@@ -1,0 +1,36 @@
+<script>
+    const socket = io.connect('/');
+    
+    const cardList  = document.querySelector('#list');
+    const inputText = document.querySelector('#text');
+    const sendAll   = document.querySelector('#send-all');
+
+    const getCardTeml = (msg) => {
+      return `
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p>${msg.text}</p>
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex flex-row align-items-center">
+                            <p class="small mb-0 ms-2">${msg.username}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          `;
+    };
+
+    // Генерация события message-to-all
+    socket.on('message-to-all', (msg) => {
+        const div = getCardTeml(msg)      
+        cardList.insertAdjacentHTML('afterBegin', div)
+        //boxList.insertAdjacentHTML('beforeend', div)
+    })
+
+    // сделаем подписку на нажатие кнопки
+    sendAll.addEventListener('click', () => {
+        socket.emit('message-to-all', {
+            text: inputText.value
+        })
+    }) 
+</script>
