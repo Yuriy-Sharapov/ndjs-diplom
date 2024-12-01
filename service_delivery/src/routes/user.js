@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const {passport} = require('../auth')
+const bcrypt = require('bcrypt')
 
-const db = require('../storage/users')
+const Users = require('../models/users')
 
 router.get('/user/login', (req, res) => {
 
@@ -23,209 +24,123 @@ router.post('/user/login',
 
       console.log("req.user: ", req.user)
       res.redirect('/')
-
-      // const {username, password} = req.body
-      // console.log(`username: ${username}, passwod: ${password}`)
-
-      // db.findByUsername(username, (err, user) =>{
-      //   if (err){
-      //     console.log('Не найден пользователь')
-      //     res.redirect('/user/login')
-      //     return
-      //   }
-
-      //   console.log("user из БД: ", user)
-      //   if (!db.verifyPassword(user, password)){
-      //     console.log('Неверный пароль')
-      //     res.redirect('/user/login')
-      //     return
-      //   }
-
-      //   console.log(`Найден пользователь`)
-      //   console.log(`username: ${user.username}, password: ${user.password}`)
-      //   res.redirect(`/user/profile/${user.id}`)
-      // })
     }
 )
 
 router.get('/user/signup', (req, res) => {
 
   let user_prefill = { 
-    username: '',
-    displayName: '',
-    email: ''
+    email       : '',
+    name        : '',
+    contactPhone: ''
   }
 
   res.render('user/signup', {
-    title: 'Авторизация',
+    title: 'Регистрация пользователя',
     user: req.user,    
     user_prefill: user_prefill
   })
 })
 
-router.post('/user/signup',(req, res) => {
+router.post('/user/signup', async (req, res) => {
 
-    const {username, password, password_rep, displayName, email} = req.body
+  const {email, password, password_rep, name, contactPhone} = req.body
 
-    if (password !== password_rep) {
-      console.log('Пароли не совпадают')
+  // если пользователь ошибся, то даем ему возможность поправить ввод на странице регистрации
+  let user_prefill = {
+    email       : email,
+    name        : name,
+    contactPhone: contactPhone
+  }
 
-      // если пользователь ошибся, то даем ему возможность поправить ввод на странице регистрации
-      let user_prefill = {
-        username: username,
-        displayName: displayName,
-        email: email
-      }
+  // Проверка совпадения пароля и его повтора
+  if (password !== password_rep) {
+    console.log('Пароли не совпадают')
 
+    res.render('user/signup', {
+      title: 'Регистрация пользователя',
+      user: req.user,
+      user_prefill: user_prefill
+    })
+    return      
+  }
+
+  try {
+    const users = await Users.find().select('-__v') 
+    console.log(`Все пользователи`)
+    console.log(users)
+    const user = await Users.findOne({ "email": email }).select('-__v')
+    if (user) {
+      console.log(`Пользователь ${user.email} уже существует`)    
       res.render('user/signup', {
-        title: 'Авторизация',
+        title: 'Регистрация пользователя',
         user: req.user,
         user_prefill: user_prefill
       })
-      return      
-    }
+      return
+    }           
+  } catch (e) {
+    // идем дальше
+  } 
 
-    let newUser = {
-      username: username,
-      password: password,
-      displayName: displayName,
-      email: email
-    }
+  // зашифруем пароль
+  try {
+    // получаем соль
+    const salt = await bcrypt.genSalt(10)
+    // солим и шифруем пароль
+    const hash_password = await bcrypt.hash(password, salt)
 
-    db.findByUsername(username, (err, user) =>{
+    console.log(`password - ${password}`)
+    console.log(`salt - ${salt}`)
+    console.log(`hash - ${hash_password}`)    
 
-      if (user){
-        console.log('Такой пользователь уже существует')
-        res.render('user/signup', {
-          title: 'Авторизация',
-          user: req.user,
-          user_prefill: newUser
-        })
-        return
-      }
+    console.log({email, hash_password, name, contactPhone})
 
-      db.addNewUser(newUser, (err, newDbUser) =>{
-        if (err){
-          console.log('Такой пользователь уже существует')
-          res.render('user/signup', {
-            title: 'Авторизация',
-            user: req.user,
-            user_prefill: newUser
-          })
-          return
-        }        
-        console.log(`Пользователь создан`)
-        console.log(newDbUser)
-        res.redirect('/user/login')
-      })      
+    const newUser = Users({
+      email       : email,
+      passwordHash: hash_password,
+      name        : name,
+      contactPhone: contactPhone
     })
 
-    // if (password !== password_rep) {
-    //   console.log('Пароли не совпадают')
-
-    //   // если пользователь ошибся, то даем ему возможность поправить ввод на странице регистрации
-    //   let user_prefill = {
-    //     username: username,
-    //     displayName: displayName,
-    //     email: email
-    //   }
-
-    //   res.render('user/signup', {
-    //     title: 'Авторизация',
-    //     user: req.user,
-    //     user_prefill: user_prefill
-    //   })
-    //   return      
-    // }
-
-    // let newUser = {
-    //   username: username,
-    //   password: password,
-    //   displayName: displayName,
-    //   email: email
-    // }
-
-    // db.findByUsername(username, (err, user) =>{
-
-    //   console.log('-------------------')
-    //   console.log(`username: ${newUser.username}, password: ${newUser.password}`)
-    //   console.log(`displayName: ${newUser.displayName}, email: ${newUser.email}`)
-
-    //   if (user){
-    //     console.log('Такой пользователь уже существует')
-    //     res.render('user/signup', {
-    //       title: 'Авторизация',
-    //       user: req.user,
-    //       user_prefill: newUser
-    //     })
-    //     return
-    //   }
-
-    //   db.addNewUser(newUser, (err, newDbUser) =>{
-    //     if (err){
-    //       console.log('Такой пользователь уже существует')
-    //       res.render('user/signup', {
-    //         title: 'Авторизация',
-    //         user: req.user,
-    //         user_prefill: newUser
-    //       })
-    //       return
-    //     }        
-    //     console.log(`Пользователь создан`)
-    //     console.log(`id: ${newDbUser.id}, username: ${newDbUser.username}, passwod: ${newDbUser.password}`)
-    //     res.redirect(`/user/profile/${newDbUser.id}`)
-    //   })      
-    // })
-  }
-)
+    try {
+      await newUser.save()
+      // Успешно создали пользователя, переходим на страницу входа
+      res.redirect('/user/login')
+    } catch (e) {
+      // нашли пользователя с тем же именем, с которым регистрируются
+      console.log('Ошибка при сохранении нового пользовател в БД')
+      res.render('user/signup', {
+        title: 'Регистрация пользователя',
+        user: req.user,
+        user_prefill: user_prefill
+      })
+    } 
+  } catch (e) {
+    console.log(`Ошибка при шифровании пароля`)
+    return;
+  }   
+})
 
 router.get('/user/logout',  (req, res) => {
-    req.logout(function(err) {
-      res.redirect('/')
-    })
+  req.logout(function(err) {
+    res.redirect('/')
+  })
 })
 
 router.get('/user/profile',
-    (req, res, next) => {
-      if (!req.isAuthenticated()) {
-        return res.redirect('/user/login')
-      }
-      next()
-    },
-    (req, res) => {
-      res.render('user/profile', {
-        title: 'Профиль пользователя',
-        user: req.user
-      })
-    }    
-    // (req, res) => {
-
-    //   const {id} = req.params
-    //   db.findById(id, (err, user) =>{
-    //     if (err){
-    //       console.log('Не найден пользователь')
-    //       res.redirect('/user/login')
-    //       return
-    //     }
-
-    //     res.render('user/profile', {
-    //       title: 'Профиль пользователя',
-    //       user: user
-    //     })
-    //   })
-    // }
+  (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      return res.redirect('/user/login')
+    }
+    next()
+  },
+  (req, res) => {
+    res.render('user/profile', {
+      title: 'Профиль пользователя',
+      user: req.user
+    })
+  }    
 )
-
-router.get('/user/user_data', function(req, res) {
-
-  if (req.user === undefined) {
-      // The user is not logged in
-      res.json({});
-  } else {
-      res.json({
-          user: req.user
-      });
-  }
-});
 
 module.exports = router

@@ -1,17 +1,22 @@
 const multer = require('multer')
+const path = require('path')
 
 const storage = multer.diskStorage({
     destination(req, file, cb){
-        // в колбек отправляем ошибку (null) и название папки, куда будем сохранять файлы
-        cb(null, 'public/books')
+        cb(null, path.join(__dirname, '..', 'public', 'books'))
     },
     filename(req, file, cb){
         // в колбек отправляем ошибку (null) и маску с названием файла в нашей папке
-        cb(null, `${Date.now()}-${file.originalname}`)
+        switch (file.fieldname) {
+            case 'cover':
+                cb(null, `${Date.now()}-cover-${Buffer.from(file.originalname, 'latin1').toString()}`)
+                break;
+            case 'book':
+                cb(null, `${Date.now()}-book-${Buffer.from(file.originalname, 'latin1').toString()}`)
+                break;
+        }          
     }
 })
-
-// module.exports = multer({storage})
 
 // Массив с доступными MIME типами
 const allowedTypes = [      
@@ -19,7 +24,8 @@ const allowedTypes = [
     'application/rtf',
     'application/vnd.oasis.opendocument.text',
     'text/plain',
-    'text/html'
+    'text/html',
+    'image/jpeg'
 ]        
 
 const fileFilter = (req, file, cb) => {     // Фильтр типов файлов

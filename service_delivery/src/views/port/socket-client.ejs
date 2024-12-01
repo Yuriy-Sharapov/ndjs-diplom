@@ -1,9 +1,14 @@
 <script>
-    const socket = io.connect('/');
+    //console.log(`location.pathname = ${location.pathname}`)
+    const bookId = location.pathname.split('/').pop();
+    //console.log(`init socket bookId = ${bookId}`)
+    const socket = io.connect('/', {query: `bookId=${bookId}`});
+    //console.log(`socket.handshake.query`)
+    //console.log(socket.query)
     
     const cardList  = document.querySelector('#list');
     const inputText = document.querySelector('#text');
-    const sendAll   = document.querySelector('#send-all');
+    const sendBookDiscussants = document.querySelector('#send-book-discussants');
 
     const getCardTeml = (msg) => {
       return `
@@ -14,23 +19,40 @@
                         <div class="d-flex flex-row align-items-center">
                             <p class="small mb-0 ms-2">${msg.username}</p>
                         </div>
+                        <div class="d-flex flex-row align-items-center">
+                            <p class="small text-muted mb-0">${msg.date}</p>
+                        </div>                        
                     </div>
                 </div>
             </div>
           `;
     };
 
-    // Генерация события message-to-all
-    socket.on('message-to-all', (msg) => {
-        const div = getCardTeml(msg)      
-        cardList.insertAdjacentHTML('afterBegin', div)
-        //boxList.insertAdjacentHTML('beforeend', div)
-    })
+    // // Генерация события message-to-all
+    // socket.on('message-to-all', (msg) => {
+    //     const div = getCardTeml(msg)      
+    //     cardList.insertAdjacentHTML('afterBegin', div)
+    // })
 
-    // сделаем подписку на нажатие кнопки
-    sendAll.addEventListener('click', () => {
-        socket.emit('message-to-all', {
-            text: inputText.value
-        })
-    }) 
+    // // сделаем подписку на нажатие кнопки
+    // sendAll.addEventListener('click', () => {
+    //     socket.emit('message-to-all', {
+    //         text: inputText.value,
+    //         bookid: book.id
+    //     })
+    // })    
+
+    socket.on('message-to-book-discussants', (msg) => {
+        const div = getCardTeml(msg)
+        cardList.insertAdjacentHTML('afterBegin', div)
+    });
+
+    sendBookDiscussants.addEventListener('click', () => {
+        if(inputText.value!==""){
+            socket.emit('message-to-book-discussants', {
+                text: inputText.value,
+            })
+            inputText.value = ""
+        }
+    })
 </script>

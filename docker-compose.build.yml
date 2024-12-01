@@ -12,8 +12,8 @@ services:
       - 3003:3003
     depends_on:
       - storage        
-  books:
-    build: ./service_books/
+  delivery:
+    build: ./service_delivery/
     environment:
       - PORT=3002
       - COUNTER_URL=http://counter:3003

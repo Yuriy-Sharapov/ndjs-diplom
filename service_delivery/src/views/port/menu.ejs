@@ -15,20 +15,20 @@
                 <a class="nav-link" href="/">Главная<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/books">Список книг</a>
+                <a class="nav-link" href="/api/adverts">Объявления</a>
             </li>
             <% if (!user) { %>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/login">Войти</a>
+                    <a class="nav-link" href="/api/signin">Войти</a>
                 </li> 
             <% } else { %>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/profile"><%= user.displayName %></a>
+                    <a class="nav-link" href="/api/profile"><%= user.displayName %></a>
                 </li>                 
             <% } %>
             <% if (!user) { %>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/signup">Зарегистрироваться</a>
+                    <a class="nav-link" href="/api/signup">Зарегистрироваться</a>
                 </li>                
             <% } %>            
         </ul>

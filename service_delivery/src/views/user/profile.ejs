@@ -2,12 +2,10 @@
 <%- include('../port/menu', { user: user }) %>
 
 <p>
-    <b>ID:</b>         <%= user.id %><br />
-    <b>Username:</b>   <%= user.username %><br />
-    <b>Name:</b>       <%= user.displayName %><br />
-    <% if (user.emails) { %>
-        <b>Email:</b>  <%= user.emails[0].value %><br />
-    <% } %>
+    <b>ID:</b>              <%= user.id %><br />
+    <b>Username:</b>        <%= user.username %><br />
+    <b>DisplayName:</b>     <%= user.displayName %><br />
+    <b>Email:</b>           <%= user.email %><br />
 </p>
 <a href='/user/logout'>Выйти</a>
 
