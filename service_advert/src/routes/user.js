@@ -5,20 +5,20 @@ const bcrypt = require('bcrypt')
 
 const Users = require('../models/users')
 
-router.get('/user/login', (req, res) => {
+router.get('/api/signin', (req, res) => {
 
-    res.render('user/login', {
+    res.render('user/signin', {
       title: 'Авторизация',
       user: req.user
     })
 })
 
-router.post('/user/login',
-    passport.authenticate('local', { failureRedirect: '/user/login' }),
+router.post('/api/signin',
+    passport.authenticate('local', { failureRedirect: '/api/signin' }),
     (req, res) => {
 
       if (!req.user){
-        res.redirect('/user/login')
+        res.redirect('/api/signin')
         return
       }
 
@@ -42,7 +42,7 @@ router.get('/user/signup', (req, res) => {
   })
 })
 
-router.post('/user/signup', async (req, res) => {
+router.post('/api/signup', async (req, res) => {
 
   const {email, password, password_rep, name, contactPhone} = req.body
 
@@ -106,7 +106,7 @@ router.post('/user/signup', async (req, res) => {
     try {
       await newUser.save()
       // Успешно создали пользователя, переходим на страницу входа
-      res.redirect('/user/login')
+      res.redirect('/api/signin')
     } catch (e) {
       // нашли пользователя с тем же именем, с которым регистрируются
       console.log('Ошибка при сохранении нового пользовател в БД')
@@ -122,16 +122,16 @@ router.post('/user/signup', async (req, res) => {
   }   
 })
 
-router.get('/user/logout',  (req, res) => {
+router.get('/api/logout',  (req, res) => {
   req.logout(function(err) {
     res.redirect('/')
   })
 })
 
-router.get('/user/profile',
+router.get('/api/profile',
   (req, res, next) => {
     if (!req.isAuthenticated()) {
-      return res.redirect('/user/login')
+      return res.redirect('/api/signin')
     }
     next()
   },

@@ -7,40 +7,41 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
-      ME_CONFIG_BASICAUTH: false
-  storage:
-    image: redis
-    volumes:
-      - ./service_counter/data:/data
-  counter:
-    image: 14101916/redis_counter:v1.0.0
-    environment:
-      - PORT=3003
-      - REDIS_URL=redis://storage
-    ports:
-      - 3003:3003
-    depends_on:
-      - storage        
-  delivery:
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
+  #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+  #     ME_CONFIG_BASICAUTH: false
+  # storage:
+  #   image: redis
+  #   volumes:
+  #     - ./service_counter/data:/data
+  # counter:
+  #   image: 14101916/redis_counter:v1.0.0
+  #   environment:
+  #     - PORT=3003
+  #     - REDIS_URL=redis://storage
+  #   ports:
+  #     - 3003:3003
+  #   depends_on:
+  #     - storage        
+  service_advert:
     image: node:20.10
     working_dir: /app
     volumes:
-      - ./service_delivery/:/app
+      - ./service_advert/:/app
     environment:
       - PORT=3002
-      - COUNTER_URL=http://counter:3003
+      # - COUNTER_URL=http://counter:3003
       - MONGODB_URL=mongodb://root:example@mongo:27017/
     ports:
       - 80:3002
     command: npm run dev
     depends_on:
-      - counter
+      - mongo
+      # - counter

@@ -26,7 +26,7 @@ app.use(errorMiddleware)
 // console.log(`public dir - ${public_dir}`)
 // app.use('/public', express.static(public_dir)) // даем возможность загружать файлы
 
-const preloadBooks = require('./storage/books')
+const preloadAdverts = require('./storage/adverts')
 const preloadUsers = require('./storage/users')
 
 // Объявляем асинхронную функциню для соединения с БД и запуском сервера
@@ -34,14 +34,21 @@ async function start(PORT, MONGODB_URL) {
     try {
         console.log(`MONGODB_URL - ${MONGODB_URL}`)
         await mongoose.connect(MONGODB_URL);
-        await preloadBooks();
-        await preloadUsers();
-        server.listen(PORT, () => {
-            console.log(`Server is listening port ${PORT}...`)
-        })
     } catch (e) {
         console.log(`Has no connection to MongoDB`)
+        console.log(e)
     }
+    
+    try {
+        await preloadUsers();
+        await preloadAdverts();
+    } catch(e) {
+        console.log(e)
+    }
+
+    server.listen(PORT, () => {
+        console.log(`Server is listening port ${PORT}...`)
+    })
 }
 
 const MONGODB_URL = process.env.MONGODB_URL
