@@ -38,26 +38,19 @@ const fs = require('fs')
 
 function delete_old_images() {
 
-    console.log(`===delete_old_images=== bigin`)
     const directory = path.join(__dirname, '..', 'public', 'adverts', 'images')
 
     const items = fs.readdirSync(directory)
-
-    // console.log(`===delete items`)
-    // console.log(items)
 
     items.forEach(item => {
         try {
             fs.rmSync(path.join(directory, item), { force: true });
         } catch (e) {
-            //console.log(e)
         }
     });
 }
 
 function recover_images() {
-
-    console.log(`===recover_images=== bigin`)
 
     const directory_from = path.join(__dirname, '..', 'public', 'adverts', 'images', 'backup')
     const directory_to   = path.join(__dirname, '..', 'public', 'adverts', 'images')
@@ -65,8 +58,6 @@ function recover_images() {
     try {
         // восстанавливаем изображения
         const filenames = fs.readdirSync(directory_from)
-        // console.log(`===recover files`)
-        // console.log(filenames)
 
         filenames.forEach(file => {
             fs.cpSync(path.join(directory_from, file), path.join(directory_to, file) )

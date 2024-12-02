@@ -1,0 +1,19 @@
+// Запустить наше сервис через nodemon, остальные сервисы через контейнеры
+docker compose -f docker-compose.dev.yml up
+docker compose -f docker-compose.dev.yml down
+
+// собрать образ нашего сервиса и запустить все контейнеры
+docker compose -f docker-compose.build.yml up
+docker compose -f docker-compose.build.yml down
+ 
+// собрать образ нашего сервиса с нужным нам именем (без запуска)
+// команду выполнять из папки сервиса
+docker build -t 14101916/advert:v1.0.0 .
+
+// Загружаем образ нашего сервиса в Docker Hub
+docker push 14101916/advert:v1.0.0
+
+// Запустить наше приложение через контейнеры
+// образ нашего сервисаи из Docker Hub
+docker compose up
+docker compose down

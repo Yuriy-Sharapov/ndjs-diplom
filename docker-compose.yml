@@ -21,7 +21,7 @@ services:
     depends_on:
       - storage        
   service_advert:
-    image: 14101916/service_advert:v5.0.0
+    image: 14101916/advert:v1.0.0
     environment:
       - PORT=3002
       - MONGODB_URL=mongodb://root:example@mongo:27017/
