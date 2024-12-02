@@ -37,20 +37,40 @@ const path = require('path')
 const fs = require('fs')
 
 function delete_old_images() {
-    try {
-        // удаляем все старые файлы изображений
-        fs.rmSync(path.join(__dirname, '..', 'public', 'adverts', 'images'), { force: true });
-    } catch(e) {
-        console.log(`===delete_old_images===`)
-        console.log(e)
-    }
+
+    console.log(`===delete_old_images=== bigin`)
+    const directory = path.join(__dirname, '..', 'public', 'adverts', 'images')
+
+    const items = fs.readdirSync(directory)
+
+    // console.log(`===delete items`)
+    // console.log(items)
+
+    items.forEach(item => {
+        try {
+            fs.rmSync(path.join(directory, item), { force: true });
+        } catch (e) {
+            //console.log(e)
+        }
+    });
 }
 
 function recover_images() {
+
+    console.log(`===recover_images=== bigin`)
+
+    const directory_from = path.join(__dirname, '..', 'public', 'adverts', 'images', 'backup')
+    const directory_to   = path.join(__dirname, '..', 'public', 'adverts', 'images')
+
     try {
         // восстанавливаем изображения
-        fs.cpSync(path.join(__dirname, '..', 'public', 'adverts', 'images', 'backup'),
-                  path.join(__dirname, '..', 'public', 'adverts', 'images') )
+        const filenames = fs.readdirSync(directory_from)
+        // console.log(`===recover files`)
+        // console.log(filenames)
+
+        filenames.forEach(file => {
+            fs.cpSync(path.join(directory_from, file), path.join(directory_to, file) )
+        })
     } catch(e) {
         console.log(`===recover_images===`)
         console.log(e)
@@ -83,8 +103,8 @@ async function preloadAdverts(){
             console.log(advert)
            
             const images = advert.images.map( fileName => { return path.join(imageDir, fileName) })
-            console.log(`${advert.shortText} - список картинок`)
-            console.log(images)
+            // console.log(`${advert.shortText} - список картинок`)
+            // console.log(images)
 
             //const {shortText, description, images, createdAt, updatedAt, tags, isDeleted} = advert
             const newAdvert = new Adverts({
@@ -96,14 +116,14 @@ async function preloadAdverts(){
                 updatedAt  : advert.updatedAt,
                 tags       : advert.tags,
                 isDeleted  : advert.isDeleted
-            })
+            }) 
             await newAdvert.save()                
         }
 
     } catch (e) {
         console.log(`Ошибка при обращении к коллекции Adverts`)
-        console.log(e)
+        console.log(e)    
     }
-}
+}            
 
 module.exports = preloadAdverts
