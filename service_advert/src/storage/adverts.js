@@ -5,33 +5,57 @@ const advert_list = [
     new cAdvert(
         shortText   = "Футбольный мяч, 5 размер, белый",
         description = "Современные футбольные мячи варьируются от 1-го до 5-го размера для разных возрастов",
-        images      = ["ball.webp"],
+        images      = ["ball.jpg", "ball2.jpg", "ball3.jpg"],
         userId      = 1,
-        createdAt   = new Date,
+        createdAt   = new Date(),
         updatedAt   = null,
         tags        = ["мяч", "футбол"],
         isDeleted   = false ),
     new cAdvert(
         shortText   = "Шнурки резинки с фиксатором плоские с фиксатором",
         description = "Шнурки резинки для обуви с фиксаторами решат вашу проблему развязывающихся шнурков",
-        images      = ["laces.webp"],
+        images      = ["laces.jpg", "laces2.jpg"],
         userId      = 1,
-        createdAt   = new Date,
+        createdAt   = new Date(),
         updatedAt   = null,
         tags        = ["шнурки", "обувь"],
         isDeleted   = false ),
     new cAdvert(
         shortText   = "Ложка для обуви, рожок для обуви, металл, СЕРЕБРО, 45см",
         description = "Рожок для обуви, металл, 45см. (Россия)",
-        images      = ["shoespoon.webp"],
+        images      = ["shoespoon.jpg"],
         userId      = 2,
-        createdAt   = new Date,
+        createdAt   = new Date(),
         updatedAt   = null,
         tags        = ["ложка", "обувь", "обувной рожок"],
         isDeleted   = false ),         
 ]
 
 const Adverts = require('../models/adverts')
+const Users = require('../models/users')
+const path = require('path')
+const fs = require('fs')
+
+function delete_old_images() {
+    try {
+        // удаляем все старые файлы изображений
+        fs.rmSync(path.join(__dirname, '..', 'public', 'adverts', 'images'), { force: true });
+    } catch(e) {
+        console.log(`===delete_old_images===`)
+        console.log(e)
+    }
+}
+
+function recover_images() {
+    try {
+        // восстанавливаем изображения
+        fs.cpSync(path.join(__dirname, '..', 'public', 'adverts', 'images', 'backup'),
+                  path.join(__dirname, '..', 'public', 'adverts', 'images') )
+    } catch(e) {
+        console.log(`===recover_images===`)
+        console.log(e)
+    }
+}
 
 async function preloadAdverts(){
 
@@ -41,13 +65,38 @@ async function preloadAdverts(){
         console.log(`adverts_count = ${adverts_count}`)
         if(adverts_count !== 0) return;
 
+        // удаляем старые изображения в папке images
+        delete_old_images()
+        // восстанавливаем изображения по умолчанию
+        recover_images()
+
+        const prefillUser = await Users.findOne().select('-__v')
+        console.log(`===prefillUser===`)
+        console.log(prefillUser)
+        const prefillUserId = prefillUser._id
+
+        const imageDir = '/' + path.join('app','src','public','adverts','images')
+
         console.log(`Нужно инициализировать данные БД Adverts`)
         for (i = 0; i < advert_list.length; i++){
             const advert = advert_list[i]
             console.log(advert)
+           
+            const images = advert.images.map( fileName => { return path.join(imageDir, fileName) })
+            console.log(`${advert.shortText} - список картинок`)
+            console.log(images)
 
-            const {shortText, description, images, userId, createdAt, updatedAt, tags, isDeleted} = advert
-            const newAdvert = new Adverts({shortText, description, images, userId, createdAt, updatedAt, tags, isDeleted})
+            //const {shortText, description, images, createdAt, updatedAt, tags, isDeleted} = advert
+            const newAdvert = new Adverts({
+                shortText  : advert.shortText,
+                description: advert.description,
+                images     : images,
+                userId     : prefillUserId,
+                createdAt  : advert.createdAt,
+                updatedAt  : advert.updatedAt,
+                tags       : advert.tags,
+                isDeleted  : advert.isDeleted
+            })
             await newAdvert.save()                
         }
 

@@ -11,9 +11,9 @@ const verify = async (email, password, done) => {
         const user = await Users.findOne({ "email": email }).select('-__v')
         console.log(`user verify - ${user}`)
         console.log(`user input password - ${password}`)
-        console.log(`user db password - ${user.password}`)
+        console.log(`user db password - ${user.passwordHash}`)
 
-        const success = await bcrypt.compare(password, user.password)
+        const success = await bcrypt.compare(password, user.passwordHash)
         console.log(`psw_check_res - ${success}`)
 
         if (success === false) {
@@ -27,12 +27,13 @@ const verify = async (email, password, done) => {
 
     } catch (e) {
         console.log(`Ошибка при аутентификации пользователя`)
+        console.log(e)
         return done(null, false)
     } 
 }
   
 const options = {
-    usernameField: "username",
+    usernameField: "email",
     passwordField: "password"
 }
   

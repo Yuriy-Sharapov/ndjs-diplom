@@ -8,28 +8,28 @@
         <div class="card">
             <div class="card-body">
 
-                <h5 class="card-title"><%= advert.shortText %></h5>
+              <h5 class="card-title"><%= advert.shortText %></h5>
 
-                <% if(advert.images.length) { %>
-                  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                      
-                      <div class="carousel-inner">
-                          <% advert.images.map((el, idx) => {  %>
-                              <div class="carousel-item active">
-                                  <img class="d-block w-100" src="<%= el %>" alt="First slide">
-                              </div>
-                          <% }) %>
-                      </div>
-          
-                      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Предыдущая</span>
-                      </a>
-                      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Следующая</span>
-                      </a>
-                  </div>
+              <% if(advert.images && advert.images.length) { %>
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    
+                    <div class="carousel-inner">
+                        <% advert.images.map((el, idx) => {  %>
+                            <div class="carousel-item active">
+                                <img class="d-block w-100" src="<%= el %>" alt="First slide">
+                            </div>
+                        <% }) %>
+                    </div>
+        
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Предыдущая</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Следующая</span>
+                    </a>
+                </div>
               <% } %>
 
               <table class="table">
@@ -38,6 +38,10 @@
                       <td>Описание</td>
                       <td><%= advert.description %></td>
                     </tr>
+                    <tr>
+                      <td>Изображения</td>
+                      <td><%= advert.imagesUrlRow %></td>
+                    </tr>                     
                     <tr>
                       <td>Автор</td>
                       <td><%= advert.authorName %></td>
@@ -51,8 +55,9 @@
                       <td><%= advert.updatedAt %></td>
                     </tr>
                     <tr>
-                      <input id="input" type="text" value="Istanbul, Adana, Adiyaman, Afyon, Agri, Aksaray, Ankara" data-role="tagsinput" class="form-control" />                                       
-                    </tr> 
+                      <td>Теги</td>
+                      <td><%= advert.tags %></td>
+                    </tr>                    
                     <tr>
                       <td>
                           <input type="checkbox"
@@ -60,18 +65,22 @@
                                 id="inputisDeleted"
                                 <%= advert.isDeleted ? "checked" : "unchecked" %>
                                 disabled>
-                          <label for="inputisDeleted">Объявление удалено</label>
+                          <label for="inputisDeleted">Скрыть объявление</label>
                       </td>
                       <td></td>
                     </tr>
+                    <tr>
+                      <td>Количество просмотров</td>
+                      <td><%= view_advert_count %></td>
+                    </tr>                     
                   </tbody>
               </table>
 
               <div class="text-right">
-                  <a class="btn btn-sm btn-primary" href="/adverts/update/<%= advert.id %>">
+                  <a class="btn btn-sm btn-primary" href="/api/adverts/update/<%= advert.id %>">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                   </a>
-                  <form action="/books/delete/<%= advert.id %>" method="POST" class="d-inline">
+                  <form action="/api/adverts/delete/<%= advert.id %>" method="POST" class="d-inline">
                       <button class="btn btn-sm btn-danger">
                           <i class="fa fa-trash" aria-hidden="true"></i>
                       </button>

@@ -27,7 +27,7 @@ router.post('/api/signin',
     }
 )
 
-router.get('/user/signup', (req, res) => {
+router.get('/api/signup', (req, res) => {
 
   let user_prefill = { 
     email       : '',

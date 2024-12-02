@@ -1,8 +1,8 @@
 <script>
     //console.log(`location.pathname = ${location.pathname}`)
-    const bookId = location.pathname.split('/').pop();
-    //console.log(`init socket bookId = ${bookId}`)
-    const socket = io.connect('/', {query: `bookId=${bookId}`});
+    const advertId = location.pathname.split('/').pop();
+    //console.log(`init socket advertId = ${advertId}`)
+    const socket = io.connect('/', {query: `advertId=${advertId}`});
     //console.log(`socket.handshake.query`)
     //console.log(socket.query)
     
@@ -17,7 +17,7 @@
                     <p>${msg.text}</p>
                     <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
-                            <p class="small mb-0 ms-2">${msg.username}</p>
+                            <p class="small mb-0 ms-2">${msg.name}</p>
                         </div>
                         <div class="d-flex flex-row align-items-center">
                             <p class="small text-muted mb-0">${msg.date}</p>
@@ -38,18 +38,18 @@
     // sendAll.addEventListener('click', () => {
     //     socket.emit('message-to-all', {
     //         text: inputText.value,
-    //         bookid: book.id
+    //         advertId: advert.id
     //     })
     // })    
 
-    socket.on('message-to-book-discussants', (msg) => {
+    socket.on('message-to-advert-discussants', (msg) => {
         const div = getCardTeml(msg)
         cardList.insertAdjacentHTML('afterBegin', div)
     });
 
     sendBookDiscussants.addEventListener('click', () => {
         if(inputText.value!==""){
-            socket.emit('message-to-book-discussants', {
+            socket.emit('message-to-advert-discussants', {
                 text: inputText.value,
             })
             inputText.value = ""

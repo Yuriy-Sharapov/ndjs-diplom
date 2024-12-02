@@ -21,10 +21,10 @@ app.use(router)
 const errorMiddleware = require('./middleware/error')
 app.use(errorMiddleware)
 
-// const path = require('path')
-// const public_dir = path.join(__dirname,"public")
-// console.log(`public dir - ${public_dir}`)
-// app.use('/public', express.static(public_dir)) // даем возможность загружать файлы
+const path = require('path')
+const public_dir = path.join(__dirname, "public")
+console.log(`public dir - ${public_dir}`)
+app.use('/public', express.static(public_dir)) // даем возможность загружать файлы
 
 const preloadAdverts = require('./storage/adverts')
 const preloadUsers = require('./storage/users')

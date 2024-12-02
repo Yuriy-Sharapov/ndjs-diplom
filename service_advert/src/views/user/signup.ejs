@@ -1,11 +1,11 @@
 <%- include('../port/layout-start', { title: title }) %>
 <%- include('../port/menu', { user: user }) %>
 
-<form action="/user/signup" method="post">   
+<form action="/api/signup" method="post">  
     <div>
-        <label>Логин</label>
-        <input type="text" name="username" value="<%= user_prefill.username %>"/><br />
-    </div>
+        <label>Электронный адрес</label>
+        <input type="email" name="email" value="<%= user_prefill.email %>"/>
+    </div> 
     <div>
         <label>Пароль</label>
         <input type="password" name="password" />
@@ -16,12 +16,13 @@
     </div>    
     <div>
         <label>Имя пользователя</label>
-        <input type="text" name="displayName" value="<%= user_prefill.displayName %>"/>
+        <input type="text" name="name" value="<%= user_prefill.name %>"/>
     </div>    
     <div>
-        <label>Электронный адрес</label>
-        <input type="email" name="email" value="<%= user_prefill.email %>"/>
-    </div>        
+        <label>Контактный телефон</label>
+        <input type="text" name="contactPhone" value="<%= user_prefill.contactPhone %>"/>
+    </div> 
+
     <div>
         <input type="submit" value="Создать пользователя" />
     </div>

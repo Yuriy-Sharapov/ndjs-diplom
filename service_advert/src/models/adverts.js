@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose')
+const {Schema, model, ObjectId} = require('mongoose')
 
 const advertSchema = new Schema({
     shortText: {
@@ -23,13 +23,15 @@ const advertSchema = new Schema({
     },
     updatedAt: {
         type: Date,
+        required: false
     },
     tags: {
         type: [String],
         required: false
     },
     isDeleted: {
-        types: boolean,
+        type: Boolean,
+        required: false
     }
 })
 

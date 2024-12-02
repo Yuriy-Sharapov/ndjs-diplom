@@ -1,10 +1,10 @@
 <%- include('../port/layout-start', { title: title }) %>
 <%- include('../port/menu', { user: user }) %>
 
-<form action="/user/login" method="post">   
+<form action="/api/signin" method="post">   
     <div>
-        <label>Логин</label>
-        <input type="text" name="username" /><br />
+        <label>Email</label>
+        <input type="email" name="email" /><br />
     </div>
     <div>
         <label>Пароль</label>

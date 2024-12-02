@@ -2,7 +2,9 @@
 <%- include('../port/menu', { user: user }) %>
 
 <h1><%= title %></h1>
-<a class="btn btn-sm btn-primary" href="adverts/create">Добавить книгу</a>
+    <% if (user) { %>
+        <a class="btn btn-sm btn-primary" href="/api/adverts/create">Добавить объявление</a>
+    <% } %>
 
     <% if(adverts.length) { %>
 
@@ -23,17 +25,19 @@
                         <td><%= el.shortText %></td>
                         <td><%= el.description %></td>
                         <td class="text-right">
-                            <a class="btn btn-sm btn-success" href="/adverts/<%= el.id %>">
+                            <a class="btn btn-sm btn-success" href="/api/adverts/<%= el.id %>">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-sm btn-primary" href="/adverts/update/<%= el.id %>">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </a>
-                            <form action="/adverts/delete/<%= el.id %>" method="POST" class="d-inline">
-                                <button class="btn btn-sm btn-danger">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button>
-                            </form>
+                            <% if (user) { %>
+                                <a class="btn btn-sm btn-primary" href="/api/adverts/update/<%= el.id %>">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
+                                <form action="/api/adverts/delete/<%= el.id %>" method="POST" class="d-inline">
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            <% } %>
                             <!-- <form action="/adverts/<%= el.id %>/download" method="GET" class="d-inline">
                                 <button class="btn btn-sm btn-warning">
                                     <i class="fa fa-download" aria-hidden="true"></i>

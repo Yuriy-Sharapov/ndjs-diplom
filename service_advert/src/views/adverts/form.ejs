@@ -1,6 +1,7 @@
+<!-- <form method="POST" class="mt-5"> -->
 <form method="POST" class="mt-5" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="inputShortText">Заголовок</label>
+        <label for="inputShortText">Заголовок объявления</label>
         <input type="text"
                value="<%= advert.shortText %>"
                name="shortText"
@@ -18,7 +19,7 @@
         ><%= advert.description %></textarea>
     </div>
 
-    <% if(advert.images.length) { %>
+    <!-- <% if(advert.images && advert.images.length) { %>
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             
             <div class="carousel-inner">
@@ -38,37 +39,43 @@
             <span class="sr-only">Следующая</span>
             </a>
         </div>
-    <% } %>
+    <% } %> -->
 
-    <!-- <div class="form-group">
-        <label for="InputFileCover">Путь к файлу обложки на сервере</label>
+    <div class="form-group">
+        <label for='file'>Выберите изображения:</label>
+        <input type='file' multiple='multiple' accept='image/*' name='uploadedImages' id='file' />
+        <span class='hint'>Возможные форматы изображений: jpg, jpeg, png.</span>
+        <!-- <button type='submit'>upload</button>        -->
+        
+        <!-- <label for="InputImageUrls">Путь к изображениям</label>
         <input type="text"
-               value="<%= advert.fileCover %>"
-               name="fileCover"
+               value="<%= advert.images %>"
+               name="images"
                class="form-control"
-               id="InputFileCover"
+               id="InputImageUrls"
                disabled>
 
         <label for="uCoverPath">Загрузить обложку</label>
-        <input type="file" name="cover" class="form-control" id="uCoverPath">
-    </div> -->
+        <input type="file" name="cover" class="form-control" id="uCoverPath"> -->
+    </div>
 
-    <!-- <div class="form-group">
-        <label for="inputAuthor">Автор объявления</label>
-        <input type="text"
-               value="<%= advert.authorName %>"
-               name="author"
-               class="form-control"
-               id="inputAuthor">
-    </div> -->
- 
+    <div class="form-group">
+        <label for="inputTags">Теги</label>
+        <textarea
+                rows="3"
+                name="tags"
+                class="form-control"
+                id="inputTags"
+        ><%= advert.tags %></textarea>
+    </div>
+
     <div class="form-group">
         <input type="checkbox"
                name="isDeleted"
-               id="inputisDeleted"               
+               id="inputIsDeleted"               
                <%= advert.isDeleted ? "checked" : "unchecked" %>
                >
-        <label for="inputisDeleted">Удалить</label>
+        <label for="inputIsDeleted">Скрыть объявление</label>
     </div>
 
     <div class="form-group text-right ">

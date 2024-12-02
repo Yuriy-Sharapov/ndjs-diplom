@@ -1,5 +1,5 @@
-service_delivery/package-lock.json
-service_delivery/node_modules
+service_advert/package-lock.json
+service_advert/node_modules
 service_counter/package-lock.json
 service_counter/node_modules
 service_counter/data/dump.rdb
